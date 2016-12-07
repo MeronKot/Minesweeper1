@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             button.setClickable(false);
         }else if (button.getNearBombs() != 0) {
             {
+                button.setBackgroundResource(R.drawable.button);
                 button.setText(""+button.getNearBombs());
             }
             button.setNew(false);
@@ -199,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             button.setBackgroundResource(R.drawable.israel);
             button.setFlaged(true);
             button.setClickable(false);
-            button.setLongClickable(true);
         }
         return true;
     }
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         for(int x = 0 ; x < size ; x++)
             for(int y = 0 ; y < size ; y++)
                 for(int i = buttons[x][y].get_X() - 1; i <= buttons[x][y].get_X() + 1 ; i++ )
-                    for(int j = buttons[x][y].get_Y() - 1 ; j < buttons[x][y].get_Y() + 1 ; j++)
+                    for(int j = buttons[x][y].get_Y() - 1 ; j <= buttons[x][y].get_Y() + 1 ; j++)
                         if(i >= 0 && i < size  && j >= 0 && j < size && !buttons[i][j].isBombed())
                             buttons[x][y].setNeighbor(buttons[i][j]);
     }
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         button.setNew(false);
         button.setClickable(false);
         button.setLongClickable(false);
-        button.setBackgroundColor(Color.GRAY);
+        button.setBackgroundResource(R.drawable.button);
         if(button.getNearBombs() != 0)
             button.setText(""+button.getNearBombs());
         if(!button.isBombed()){
