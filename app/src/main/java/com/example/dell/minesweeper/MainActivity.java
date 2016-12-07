@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
     private Timer timer;
     private TextView timerView;
     private int bombs;
-    private int numberOfClickedButtons;
+    private int numberOfClickedButtons = 0;
     private int size;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
     }
     @Override
     public void click(GridButton button) {
-        if(button.isBombed())
+        if(button.isBombed() && !button.isFlaged())
         {
             button.setBackgroundResource(R.drawable.bomb);
             button.setClickable(false);
