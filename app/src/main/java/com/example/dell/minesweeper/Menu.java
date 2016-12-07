@@ -21,15 +21,10 @@ public class Menu extends AppCompatActivity {
 
     private RadioGroup group;
     private Button newGame;
-    private static int[] scoresOfLevels ={1000,1000,1000};
+    private int[] scoresOfLevels;
     TextView firstRowRight;
     TextView secondRowRight;
     TextView thirdRowRight;
-
-
-    public void onBackPressed() {
-        moveTaskToBack(true);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,17 +33,10 @@ public class Menu extends AppCompatActivity {
         firstRowRight = (TextView)findViewById(R.id.firstRowRight);
         secondRowRight = (TextView)findViewById(R.id.secondRowRight);
         thirdRowRight = (TextView)findViewById(R.id.thirdRowRight);
+        loadLevelsScores();
         firstRowRight.setText("" + scoresOfLevels[0]);
         secondRowRight.setText("" + scoresOfLevels[1]);
         thirdRowRight.setText("" + scoresOfLevels[2]);
-        /*
-        SharedPreferences scores = getSharedPreferences("scores",MODE_PRIVATE);
-        SharedPreferences.Editor scoresEditor = scores.edit();
-        scoresEditor.putInt("beginnerScore",scoresOfLevels[0]);
-        scoresEditor.putInt("mediumScore",scoresOfLevels[1]);
-        scoresEditor.putInt("expertScore",scoresOfLevels[2]);
-        scoresEditor.commit();
-        */
         group = (RadioGroup)findViewById(R.id.radioGroup);
         group.check(R.id.beginner);
         newGame = (Button) findViewById(R.id.newGame);
@@ -82,14 +70,17 @@ public class Menu extends AppCompatActivity {
         super.onPause();
         saveLevelsScores();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         loadLevelsScores();
     }
 
-    private void saveLevelsScores() {
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
+   private void saveLevelsScores() {
         SharedPreferences scores = getSharedPreferences("scores",MODE_PRIVATE);
         SharedPreferences.Editor scoresEditor = scores.edit();
         scoresEditor.putInt("beginnerScore",scoresOfLevels[0]);
@@ -99,10 +90,11 @@ public class Menu extends AppCompatActivity {
     }
 
     private void loadLevelsScores() {
+        scoresOfLevels = new int [3];
         SharedPreferences scores = getSharedPreferences("scores",MODE_PRIVATE);
-        scoresOfLevels[0] = scores.getInt("beginnerScore",1000);
-        scoresOfLevels[1] = scores.getInt("mediumScore",1000);
-        scoresOfLevels[2] = scores.getInt("expertScore",1000);
+        scoresOfLevels[0] = scores.getInt("beginnerScore",-1);
+        scoresOfLevels[1] = scores.getInt("mediumScore",-1);
+        scoresOfLevels[2] = scores.getInt("expertScore",-1);
         Log.d(TAG,"load successfully");
     }
 }

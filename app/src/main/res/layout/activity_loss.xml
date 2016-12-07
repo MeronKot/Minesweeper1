@@ -11,12 +11,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.dell.minesweeper.LossActivity">
 
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/lose"
-        android:id="@+id/imageView2"
-        android:layout_marginBottom="113dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        app:srcCompat="@drawable/loss"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/win" />
 </RelativeLayout>

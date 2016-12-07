@@ -1,6 +1,7 @@
 package com.example.dell.minesweeper;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             for (int row = 0; row < size; row++) {
                 buttons[col][row] = new GridButton(this);
                 buttons[col][row].setX_Y(col, row);
-                buttons[col][row].setLayoutParams(new ViewGroup.LayoutParams(75, 75));
+                buttons[col][row].setLayoutParams(new ViewGroup.LayoutParams(50, 50));
                 buttons[col][row].setListener(this);
                 colLayout.addView(buttons[col][row]);
             }
@@ -243,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             {
                 ArrayList<GridButton> neighbors = button.getNeighbors();
                 for(int i = 0 ; i < neighbors.size() ; i++)
-                    if(neighbors.get(i).isNew())
+                    if(neighbors.get(i).isNew() && !neighbors.get(i).isFlaged())
                         openSpaces(neighbors.get(i));
             }
         }
@@ -254,9 +255,47 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         timer.cancel();
         Intent intent = new Intent(MainActivity.this,WinActivity.class);
         intent.putExtra("time",count);
-        intent.putExtra("size",size);
-        intent.putExtra("bombs",bombs);
+        boolean breakRecord = saveTheScore(count);
+        intent.putExtra("breakRecord",breakRecord);
         MainActivity.this.startActivity(intent);
+    }
+
+    public boolean saveTheScore(int time) {
+        boolean breakRecord = false;
+        SharedPreferences scores = getSharedPreferences("scores",MODE_PRIVATE);
+        SharedPreferences.Editor scoresEditor = scores.edit();
+        if(size == 10 && bombs == 5){
+            int begginerScore = scores.getInt("beginnerScore",-1);
+            if(begginerScore == 0)
+                scoresEditor.putInt("beginnerScore",time);
+            else if (time < begginerScore)
+            {
+                scoresEditor.putInt("beginnerScore",time);
+                breakRecord = true;
+            }
+            scoresEditor.commit();
+        }else if (size == 10 && bombs == 10){
+            int mediumScore = scores.getInt("mediumScore",-1);
+            if(mediumScore == 0)
+                scoresEditor.putInt("mediumScore",time);
+            else if (time < mediumScore)
+            {
+                scoresEditor.putInt("mediumScore",time);
+                breakRecord = true;
+            }
+            scoresEditor.commit();
+        }else if(size == 5 && bombs == 10){
+            int expertScore = scores.getInt("expertScore",-1);
+            if(expertScore == 0)
+                scoresEditor.putInt("expertScore",time);
+            else if (time < expertScore)
+            {
+                scoresEditor.putInt("expertScore",time);
+                breakRecord = true;
+            }
+            scoresEditor.commit();
+        }
+        return breakRecord;
     }
 
     private void gameOver() {
