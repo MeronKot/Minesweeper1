@@ -25,6 +25,12 @@ public class Menu extends AppCompatActivity {
     TextView firstRowRight;
     TextView secondRowRight;
     TextView thirdRowRight;
+
+
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

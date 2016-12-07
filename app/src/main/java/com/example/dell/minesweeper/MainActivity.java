@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             for (int row = 0; row < size; row++) {
                 buttons[col][row] = new GridButton(this);
                 buttons[col][row].setX_Y(col, row);
-                buttons[col][row].setLayoutParams(new ViewGroup.LayoutParams(50, 50));
+                buttons[col][row].setLayoutParams(new ViewGroup.LayoutParams(75, 75));
                 buttons[col][row].setListener(this);
                 colLayout.addView(buttons[col][row]);
             }
@@ -176,7 +176,10 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             button.setClickable(false);
         }else if (button.getNearBombs() != 0) {
             {
+                button.setClickable(false);
+                button.setLongClickable(false);
                 button.setBackgroundResource(R.drawable.button);
+                button.setTextColor(Color.WHITE);
                 button.setText(""+button.getNearBombs());
             }
             button.setNew(false);
