@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             button.setBackgroundResource(R.drawable.israel);
             button.setFlaged(true);
             button.setClickable(false);
-            button.setLongClickable(false);
+            button.setLongClickable(true);
         }
         return true;
     }
