@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             {
                 ArrayList<GridButton> neighbors = button.getNeighbors();
                 for(int i = 0 ; i < neighbors.size() ; i++)
-                    if(neighbors.get(i).isNew())
+                    if(neighbors.get(i).isNew() && !neighbors.get(i).isFlaged())
                         openSpaces(neighbors.get(i));
             }
         }
