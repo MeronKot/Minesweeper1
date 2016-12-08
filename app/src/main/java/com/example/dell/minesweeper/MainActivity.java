@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
     private Timer timer;
     private TextView timerView;
     private int bombs;
-    private int numberOfClickedButtons = 0;
+    private int numberOfClickedButtons;
     private int size;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             for (int row = 0; row < size; row++) {
                 buttons[col][row] = new GridButton(this);
                 buttons[col][row].setX_Y(col, row);
-                buttons[col][row].setLayoutParams(new ViewGroup.LayoutParams(50, 50));
+                buttons[col][row].setLayoutParams(new ViewGroup.LayoutParams(100, 100));
                 buttons[col][row].setListener(this);
                 colLayout.addView(buttons[col][row]);
             }
@@ -177,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             button.setClickable(false);
         }else if (button.getNearBombs() != 0) {
             {
+
                 button.setClickable(false);
                 button.setLongClickable(false);
                 button.setBackgroundResource(R.drawable.button);
