@@ -18,5 +18,5 @@
         app:srcCompat="@drawable/loss"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/win" />
+        android:id="@+id/loss" />
 </RelativeLayout>
