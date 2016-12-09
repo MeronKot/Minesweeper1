@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         Bundle b = getIntent().getExtras();
         size = b.getInt("size");
         bombs = b.getInt("bomb");

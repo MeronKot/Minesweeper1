@@ -3,6 +3,7 @@ package com.example.dell.minesweeper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,8 @@ public class Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
         firstRowRight = (TextView)findViewById(R.id.firstRowRight);
         secondRowRight = (TextView)findViewById(R.id.secondRowRight);
         thirdRowRight = (TextView)findViewById(R.id.thirdRowRight);
