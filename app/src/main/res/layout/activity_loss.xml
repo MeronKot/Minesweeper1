@@ -15,8 +15,8 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/lose"
+        app:srcCompat="@drawable/end"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/win" />
+        android:id="@+id/loss" />
 </RelativeLayout>

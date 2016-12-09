@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         return numOfBombs;
     }
     @Override
-    public void click(GridButton button) {
+   public void click(GridButton button) {
         if(button.isBombed() && !button.isFlaged())
         {
             button.setBackgroundResource(R.drawable.bomb);

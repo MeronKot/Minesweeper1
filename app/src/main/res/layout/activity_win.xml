@@ -17,7 +17,7 @@
         app:srcCompat="@drawable/victory"
         android:id="@+id/imageView"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignEnd="@+id/winTime" />
 
     <TextView
         android:layout_width="wrap_content"
