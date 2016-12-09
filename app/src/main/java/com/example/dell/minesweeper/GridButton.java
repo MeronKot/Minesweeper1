@@ -43,6 +43,7 @@ public class GridButton extends Button implements View.OnClickListener, View.OnL
         setOnClickListener(this);
         setOnLongClickListener(this);
         setTextColor(Color.WHITE);
+        setTextSize(15);
     }
     @Override
     public void onClick(View v) {

@@ -92,9 +92,9 @@ public class Menu extends AppCompatActivity {
     private void loadLevelsScores() {
         scoresOfLevels = new int [3];
         SharedPreferences scores = getSharedPreferences("scores",MODE_PRIVATE);
-        scoresOfLevels[0] = scores.getInt("beginnerScore",-1);
-        scoresOfLevels[1] = scores.getInt("mediumScore",-1);
-        scoresOfLevels[2] = scores.getInt("expertScore",-1);
+        scoresOfLevels[0] = scores.getInt("beginnerScore",0);
+        scoresOfLevels[1] = scores.getInt("mediumScore",0);
+        scoresOfLevels[2] = scores.getInt("expertScore",0);
         Log.d(TAG,"load successfully");
     }
 }
