@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             for (int row = 0; row < size; row++) {
                 buttons[col][row] = new GridButton(this);
                 buttons[col][row].setX_Y(col, row);
-                buttons[col][row].setLayoutParams(new ViewGroup.LayoutParams(100, 100));
+                buttons[col][row].setLayoutParams(new ViewGroup.LayoutParams(50, 50));
                 buttons[col][row].setListener(this);
                 colLayout.addView(buttons[col][row]);
             }
