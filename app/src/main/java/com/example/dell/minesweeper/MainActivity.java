@@ -2,6 +2,7 @@ package com.example.dell.minesweeper;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -76,11 +77,20 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         calculateNeighbours();
     }
 
+    public static int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    public static int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
+
     private LinearLayout drawButtonsGrid(GridButton[][] buttons, int size) {
         LinearLayout rowsLayout = new LinearLayout(this);
         rowsLayout.setOrientation(LinearLayout.VERTICAL);
         rowsLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
+        int param = getScreenWidth();
         for (int col = 0; col < size; col++) {
             LinearLayout colLayout = new LinearLayout(this);
             colLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -88,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             for (int row = 0; row < size; row++) {
                 buttons[col][row] = new GridButton(this);
                 buttons[col][row].setX_Y(col, row);
-                buttons[col][row].setLayoutParams(new ViewGroup.LayoutParams(50, 50));
+                buttons[col][row].setLayoutParams(new ViewGroup.LayoutParams(param/(size + 1) ,param/(size + 1)));
                 buttons[col][row].setListener(this);
                 colLayout.addView(buttons[col][row]);
             }
@@ -96,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         }
         return rowsLayout;
     }
-
     private void putBombs(GridButton[][] buttons, int[][] bombsCoord, int numOfBombs, int size) {
         int colRand,rowRand;
         Random random = new Random();
