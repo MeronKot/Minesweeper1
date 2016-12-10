@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             {
                 bombsCoord[0][i] = colRand;
                 bombsCoord[1][i] = rowRand;
+                buttons[colRand][rowRand].setBomb(true);
             }else i--;
-            buttons[colRand][rowRand].setBomb(true);
         }
     }
 
@@ -186,14 +186,10 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         else if (button.isFlaged()) {
             button.setClickable(false);
         }else if (button.getNearBombs() != 0) {
-            {
-
-                button.setClickable(false);
-                button.setLongClickable(false);
-                button.setBackgroundResource(R.drawable.button);
-                button.setTextColor(Color.WHITE);
-                button.setText(""+button.getNearBombs());
-            }
+            button.setClickable(false);
+            button.setLongClickable(false);
+            button.setBackgroundResource(R.drawable.button);
+            button.setText(""+button.getNearBombs());
             button.setNew(false);
             numberOfClickedButtons++;
             if(numberOfClickedButtons == (size * size) - bombs)
@@ -238,35 +234,36 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
             for(int y = 0 ; y < size ; y++)
                 for(int i = buttons[x][y].get_X() - 1; i <= buttons[x][y].get_X() + 1 ; i++ )
                     for(int j = buttons[x][y].get_Y() - 1 ; j <= buttons[x][y].get_Y() + 1 ; j++)
-                        if(i >= 0 && i < size  && j >= 0 && j < size && !buttons[i][j].isBombed())
+                        if(i >= 0 && i < size  && j >= 0 && j < size)
                             buttons[x][y].setNeighbor(buttons[i][j]);
     }
 
     public boolean openSpaces(GridButton button) {
-        numberOfClickedButtons++;
         button.setNew(false);
         button.setClickable(false);
         button.setLongClickable(false);
         button.setBackgroundResource(R.drawable.button);
-        if(button.getNearBombs() != 0)
-            button.setText(""+button.getNearBombs());
+
         if(!button.isBombed()){
-            if(button.getNearBombs() == 0)
-            {
+            numberOfClickedButtons++;
+            if(button.getNearBombs() != 0)
+                button.setText(""+button.getNearBombs());
+            else{
                 ArrayList<GridButton> neighbors = button.getNeighbors();
                 for(int i = 0 ; i < neighbors.size() ; i++)
-                    if(neighbors.get(i).isNew() && !neighbors.get(i).isFlaged())
+                    if(neighbors.get(i).isNew())
                         openSpaces(neighbors.get(i));
             }
         }
+
         return button.isBombed();
     }
 
     public void winner(){
         timer.cancel();
         Intent intent = new Intent(MainActivity.this,WinActivity.class);
-        intent.putExtra("time",count-1);
-        boolean breakRecord = saveTheScore(count-1);
+        intent.putExtra("time",count - 1);
+        boolean breakRecord = saveTheScore(count - 1);
         intent.putExtra("breakRecord",breakRecord);
         MainActivity.this.startActivity(intent);
     }
