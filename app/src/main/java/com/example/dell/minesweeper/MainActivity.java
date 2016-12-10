@@ -265,8 +265,8 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
     public void winner(){
         timer.cancel();
         Intent intent = new Intent(MainActivity.this,WinActivity.class);
-        intent.putExtra("time",count);
-        boolean breakRecord = saveTheScore(count);
+        intent.putExtra("time",count-1);
+        boolean breakRecord = saveTheScore(count-1);
         intent.putExtra("breakRecord",breakRecord);
         MainActivity.this.startActivity(intent);
     }
