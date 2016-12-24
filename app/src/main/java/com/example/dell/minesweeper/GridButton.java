@@ -105,6 +105,8 @@ public class GridButton extends Button implements View.OnClickListener, View.OnL
     public void setNeighbor(GridButton button)
     {
         this.neighbors.add(button);
+        if(button.isBombed())
+            this.nearBombs++;
     }
 
     public ArrayList<GridButton> getNeighbors()

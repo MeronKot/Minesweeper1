@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         },1000,1000);
 
         putBombs(buttons,bombsCoord,bombs,size);
-        checkNeighbours(buttons,bombsCoord,size);
         calculateNeighbours();
     }
 
@@ -106,41 +105,22 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         }
         return rowsLayout;
     }
+
     private void putBombs(GridButton[][] buttons, int[][] bombsCoord, int numOfBombs, int size) {
         int colRand,rowRand;
+        boolean available = true;
         Random random = new Random();
         for (int i = 0; i < numOfBombs; i++)
         {
-            colRand = abs(random.nextInt()) % size;
-            rowRand = abs(random.nextInt()) % size;
-            if(notExist(colRand,rowRand,bombsCoord))
-            {
-                bombsCoord[0][i] = colRand;
-                bombsCoord[1][i] = rowRand;
-                buttons[colRand][rowRand].setBomb(true);
-            }else i--;
+            do{
+                colRand = random.nextInt(size - 1);
+                rowRand = random.nextInt(size - 1);
+                available = buttons[colRand][rowRand].isBombed();
+            }while(available);
+            buttons[colRand][rowRand].setBomb(true);
         }
     }
-
-    private boolean notExist(int colRand, int rowRand, int[][] bombsCoord) {
-        for(int i = 0 ; i < bombsCoord[0].length ; i++)
-        {
-            if((bombsCoord[0][i] == colRand) && (bombsCoord[1][i] == rowRand))
-                return false;
-        }
-        return true;
-    }
-
-    private void checkNeighbours(GridButton[][] buttons, int[][] bombsCoord, int size) {
-        for(int i = 0 ; i <= size - 1; i++)
-        {
-            for(int j = 0 ; j <= size - 1 ; j++)
-            {
-                buttons[i][j].setNearBombs(calculateNearBombs(i,j,size));
-            }
-        }
-    }
-
+/*
     private int calculateNearBombs(int i, int j, int size) {
         int numOfBombs = 0;
         int startRow = 0, endRow = 0, startCol = 0, endCol = 0;
@@ -174,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         }
         return numOfBombs;
     }
+  */
     @Override
    public void click(GridButton button) {
         if(button.isBombed() && !button.isFlaged())
