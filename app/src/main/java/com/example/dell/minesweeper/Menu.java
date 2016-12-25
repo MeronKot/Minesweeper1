@@ -100,5 +100,11 @@ public class Menu extends AppCompatActivity {
         scoresOfLevels[2] = scores.getInt("expertScore",0);
         Log.d(TAG,"load successfully");
     }
+//    private void saveNamesScores() {
+//        SharedPreferences names = getSharedPreferences("names" , MODE_PRIVATE);
+//        SharedPreferences.Editor namesEditor = names.edit();
+//        namesEditor.commit();
+//    }
+
 }
 
