@@ -1,56 +1,37 @@
 package com.example.dell.minesweeper;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.audiofx.BassBoost;
-import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.graphics.drawable.DrawableWrapper;
-import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.RunnableFuture;
-
-import static java.lang.Math.abs;
-import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity implements GridButtonListener {
 
     private Button button;
     private TextView textView;
     private GridButton[][] buttons;
+    private LinearLayout rowsLayout;
     private int[][] bombsCoord;
     private int count = 0;
     private Timer timer;
@@ -58,50 +39,11 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
     private int bombs;
     private int numberOfClickedButtons;
     private int size;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
-
-    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                textView.append("\n"+location.getLatitude()+" "+location.getLongitude());
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String s) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String s) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-            }
-        };
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{
-                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.INTERNET
-                }, 10);
-                return;
-            } else {
-                configureButton();
-            }
-        }
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
         Bundle b = getIntent().getExtras();
@@ -111,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         bombsCoord = new int[2][bombs];
         numberOfClickedButtons = 0;
 
-        LinearLayout rowsLayout = (LinearLayout) findViewById(R.id.rowsLayout);
+        rowsLayout = (LinearLayout) findViewById(R.id.rowsLayout);
         rowsLayout.addView(drawButtonsGrid(buttons, size));
 
         timerView = (TextView) findViewById(R.id.textView2);
@@ -133,27 +75,8 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         calculateNeighbours();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case 10:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    configureButton();
-                return;
-        }
-    }
-
-    private void configureButton() {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
-            }
-        });
-
-    }
 
     public static int getScreenWidth() {
         return Resources.getSystem().getDisplayMetrics().widthPixels;
@@ -199,41 +122,6 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         }
     }
 
-    /*
-        private int calculateNearBombs(int i, int j, int size) {
-            int numOfBombs = 0;
-            int startRow = 0, endRow = 0, startCol = 0, endCol = 0;
-
-            if(i == 0)
-                startRow = i;
-            else
-                startRow = i - 1;
-            if(j == 0)
-                startCol = j;
-            else
-                startCol = j - 1;
-
-            if(i == size - 1)
-                endRow = size - 1;
-            else
-                endRow = i + 1;
-            if(j == size - 1)
-                endCol = size - 1;
-            else
-                endCol = j+1;
-
-
-            if(!buttons[i][j].isBombed()){
-                for(int x = startRow ; x <= endRow ; x++)
-                    for(int y = startCol ; y <= endCol ; y++)
-                    {
-                        if(buttons[x][y].isBombed())
-                            numOfBombs++;
-                    }
-            }
-            return numOfBombs;
-        }
-      */
     @Override
     public void click(GridButton button) {
         if (button.isBombed() && !button.isFlaged()) {
@@ -358,43 +246,15 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
     }
 
     private void gameOver() {
-        Intent intent = new Intent(MainActivity.this, LossActivity.class);
-        MainActivity.this.startActivity(intent);
-    }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Main Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
+        for(int r = 0 ; r < buttons.length ; r++) {
+            for (int c = 0; c < buttons[0].length; c++) {
+                ObjectAnimator anim = ObjectAnimator.ofFloat(buttons[r][c], "y", 0f, 100f);
+                anim.setDuration(3000);
+                anim.start();
+            }
+        }
+        //Intent intent = new Intent(MainActivity.this, LossActivity.class);
+        //MainActivity.this.startActivity(intent);
     }
 }

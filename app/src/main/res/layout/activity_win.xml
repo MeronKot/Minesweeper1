@@ -52,4 +52,22 @@
         android:layout_above="@+id/nameInput"
         android:layout_alignEnd="@+id/nameInput"
         android:visibility="invisible" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/nameTextView"
+        android:layout_marginTop="27dp"
+        android:id="@+id/mLatitudeText" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/mLatitudeText"
+        android:layout_toEndOf="@+id/mLatitudeText"
+        android:layout_marginStart="25dp"
+        android:id="@+id/mLongitudeText" />
 </RelativeLayout>

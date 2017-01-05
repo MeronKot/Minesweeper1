@@ -3,6 +3,8 @@ package com.example.dell.minesweeper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,9 +25,12 @@ public class Menu extends AppCompatActivity {
     private RadioGroup group;
     private Button newGame;
     private int[] scoresOfLevels;
-    TextView firstRowRight;
-    TextView secondRowRight;
-    TextView thirdRowRight;
+    private TextView firstRowRight;
+    private TextView secondRowRight;
+    private TextView thirdRowRight;
+    private Button mapFragmentBtn;
+    private boolean status = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +47,12 @@ public class Menu extends AppCompatActivity {
         thirdRowRight.setText("" + scoresOfLevels[2]);
         group = (RadioGroup)findViewById(R.id.radioGroup);
         group.check(R.id.beginner);
+        mapFragmentBtn = (Button)findViewById(R.id.mapFragmentBtn);
         newGame = (Button) findViewById(R.id.newGame);
+        setListenersToButtons();
+    }
+
+    private void setListenersToButtons() {
         newGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +77,30 @@ public class Menu extends AppCompatActivity {
                 Menu.this.startActivity(intent);
             }
         });
+        mapFragmentBtn.setOnClickListener(new View.OnClickListener() {
+             @Override
+            public void onClick(View v) {
+                 FragmentManager fm = getSupportFragmentManager();
+                 FragmentTransaction ft = fm.beginTransaction();
+                 if(!status){
+                    MapFragment map = new MapFragment();
+                    ft.add(R.id.fragmentContainer,map);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                    mapFragmentBtn.setText("Table");
+                    status = true;
+                }else{
+                    TableFragment tabel = new TableFragment();
+                    ft.add(R.id.fragmentContainer,tabel);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                    mapFragmentBtn.setText("Map");
+                    status = false;
+                }
+            }
+        });
     }
+
     @Override
     protected void onPause() {
         super.onPause();
