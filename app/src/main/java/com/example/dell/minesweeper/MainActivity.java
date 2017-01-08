@@ -12,12 +12,17 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.Size;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
     private TextView textView;
     private GridButton[][] buttons;
     private LinearLayout rowsLayout;
+    private GridLayout gridLayout;
     private int[][] bombsCoord;
     private int count = 0;
     private Timer timer;
@@ -53,8 +59,11 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         bombsCoord = new int[2][bombs];
         numberOfClickedButtons = 0;
 
-        rowsLayout = (LinearLayout) findViewById(R.id.rowsLayout);
-        rowsLayout.addView(drawButtonsGrid(buttons, size));
+
+        gridLayout = (GridLayout)findViewById(R.id.gridLayout);
+        initGrid(gridLayout,buttons,size);
+        //rowsLayout = (LinearLayout) findViewById(R.id.rowsLayout);
+        //rowsLayout.addView(drawButtonsGrid(buttons, size));
 
         timerView = (TextView) findViewById(R.id.textView2);
         timer = new Timer();
@@ -75,6 +84,26 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
         calculateNeighbours();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
+    }
+
+    private void initGrid(GridLayout gridLayout, GridButton[][] buttons, int size) {
+        gridLayout.setOrientation(GridLayout.HORIZONTAL);
+        gridLayout.setColumnCount(this.size);
+        gridLayout.setRowCount(this.size);
+
+        int paramWid = getScreenWidth();
+        int paramHei = getScreenHeight();
+        for(int i = 0 ; i < size ; i++){
+            for(int j = 0 ; j < size ; j++){
+                buttons[i][j] = new GridButton(this);
+                buttons[i][j].setX_Y(i, j);
+                buttons[i][j].setLayoutParams(new ViewGroup.LayoutParams
+                        (paramWid/(size + 1), paramHei/(size + 2)));
+                //buttons[i][j].setBackgroundResource(R.drawable.unbutton);
+                buttons[i][j].setListener(this);
+                gridLayout.addView(buttons[i][j]);
+            }
+        }
     }
 
 
@@ -246,15 +275,35 @@ public class MainActivity extends AppCompatActivity implements GridButtonListene
     }
 
     private void gameOver() {
+        for(int i = 0 ; i < size ; i++){
+            for(int j = 0 ; j < size ; j++){
+                ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(buttons[i][j],"y",50f);
 
-        for(int r = 0 ; r < buttons.length ; r++) {
-            for (int c = 0; c < buttons[0].length; c++) {
-                ObjectAnimator anim = ObjectAnimator.ofFloat(buttons[r][c], "y", 0f, 100f);
-                anim.setDuration(3000);
-                anim.start();
             }
         }
-        //Intent intent = new Intent(MainActivity.this, LossActivity.class);
-        //MainActivity.this.startActivity(intent);
+
+
+        Animation anim = AnimationUtils.loadAnimation(this,R.anim.slide_in_bottom);
+        LayoutAnimationController controller = new LayoutAnimationController(anim);
+        controller.setDelay(0.3f);
+        gridLayout.setLayoutAnimation(controller);
+        gridLayout.setLayoutAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Intent intent = new Intent(MainActivity.this,LossActivity.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        controller.start();
     }
 }

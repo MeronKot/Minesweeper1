@@ -23,6 +23,12 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_below="@id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></GridLayout>
+    
     <LinearLayout
         android:id="@+id/rowsLayout"
         android:orientation="vertical"
